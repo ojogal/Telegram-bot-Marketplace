@@ -1,7 +1,7 @@
 import { Markup } from "telegraf"
 import { bot } from "../bot.js"
-import { sendCartItems } from "./sendCartItems.js"
-import { getItemQuantity, updateItemQuantity } from "../utils/processOrderItems.js"
+import { sendCartItems } from "./index.js"
+import { getItemQuantity, updateItemQuantity } from "../utils/index.js"
 
 
 export const orderConfirm = async (ctx) => {
@@ -59,7 +59,7 @@ ${ctx.session.catalog.cart.map((item, i) =>
     Grind for: ${item.Grind}
     Price: ${item.product.Price * item.quantity}MDL`).join('\n')}
   
-  <b>Total: ${totalCost}MDL</b>`, { parse_mode: 'HTML', })
+<b>Total: ${totalCost}MDL</b>`, { parse_mode: 'HTML', })
 
         ctx.session.checkout = { form: { phone: '', email: '' } }
         ctx.session.common.assertField = null

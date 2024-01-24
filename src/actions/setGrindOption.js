@@ -1,4 +1,4 @@
-import { sendCartItems } from "./sendCartItems.js"
+import { sendCartItems } from "./index.js"
 
 export const setGrindOption = async (ctx) => {
     if (ctx.update.callback_query.message.message_id) ctx.deleteMessage(ctx.update.callback_query.message.message_id)

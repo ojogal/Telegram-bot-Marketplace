@@ -1,6 +1,5 @@
-import { deletePreviousMessages } from "../utils/deletePreviousMessages.js"
-import { getCoffeeProducts } from "./getCoffeeProducts.js"
-import { getEquipmentProducts } from "./getEquipmentProducts.js"
+import { deletePreviousMessages } from "../utils/index.js"
+import { getCoffeeProducts, getEquipmentProducts } from "./index.js"
 
 export const setProductsCategory = async (ctx) => {
     ctx.session.catalog.currentPage = 1

@@ -1,6 +1,6 @@
-import { qtyControlKeyboard } from "../presets/qtyControlKeyboard.js"
-import { deletePreviousMessages } from "../utils/deletePreviousMessages.js"
-import { sendCartTotal } from "./sendCartTotal.js"
+import { qtyControlKeyboard } from "../presets/index.js"
+import { deletePreviousMessages } from "../utils/index.js"
+import { sendCartTotal } from "./index.js"
 
 export const sendCartItems = async (ctx) => {
 

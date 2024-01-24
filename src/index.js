@@ -4,7 +4,7 @@ import { session } from "telegraf"
 import { addToCart, cancelCheckout, 
   checkoutFormStep, enterCheckoutForm, 
   nextPage, orderCancel, 
-  orderConfirm, paperFilterOffer, 
+  orderConfirm, 
   prevPage, productsFilters, 
   removeFromCart, selectGrindOption, 
   sendCartItems, setGrindOption, 
@@ -79,8 +79,6 @@ bot.action(/removeFromCart (.+)/, removeFromCart)
 bot.action("cancelCheckout", cancelCheckout)
 
 bot.action(`enterCheckoutForm`, enterCheckoutForm)
-
-bot.action(`paperFilterOffer`, paperFilterOffer)
 
 bot.action(/selectGrindOption (.+)/, selectGrindOption)
 

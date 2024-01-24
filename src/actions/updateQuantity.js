@@ -1,5 +1,5 @@
-import { qtyControlKeyboard } from "../presets/qtyControlKeyboard.js"
-import { sendCartTotal } from "./sendCartTotal.js"
+import { qtyControlKeyboard } from "../presets/index.js"
+import { sendCartTotal } from "./index.js"
 
 
 export const updateQuantity = async (ctx) => {

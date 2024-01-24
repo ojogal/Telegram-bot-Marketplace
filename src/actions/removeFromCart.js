@@ -1,4 +1,4 @@
-import { sendCartTotal } from "./sendCartTotal.js"
+import { sendCartTotal } from "./index.js"
 
 export const removeFromCart = async (ctx) => {
     let [, productId] = ctx.match

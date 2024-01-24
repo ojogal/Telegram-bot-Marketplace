@@ -1,12 +1,12 @@
 import { CONFIG } from "../config.js"
-import { finalizeCheckoutForm } from "./finalizeCheckoutForm.js"
+import { finalizeCheckoutForm } from "./index.js"
 
 
 export async function checkoutFormStep(ctx) {
     if (ctx.session.checkout.form.phone === "") { await ctx.reply("Great! We need to collect some information to proceed with your order") }
-    const fieldToBeEntered = Object.entries(ctx.session.checkout.form).find(([k, v]) => !v);
+    const fieldToBeEntered = Object.entries(ctx.session.checkout.form).find(([k, v]) => !v)
   
-    const invalidCommandOrStringRegex = /\/(cart|coffee|equipment)|All coffee|All equipment|Cart/;
+    const invalidCommandOrStringRegex = /\/(cart|coffee|equipment)|All coffee|All equipment|Cart/
   
     if (ctx.session.checkout.form.phone === CONFIG.LOCALES.order.cancel ||
       ctx.session.checkout.form.email === CONFIG.LOCALES.order.cancel ||

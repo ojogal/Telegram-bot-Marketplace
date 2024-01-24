@@ -1,6 +1,6 @@
 import { CONFIG } from "../config.js"
 import { equipmentList, getEquipmentList, retrieveTables } from "../db/index.js"
-import { deletePreviousMessages } from "../utils/deletePreviousMessages.js"
+import { deletePreviousMessages } from "../utils/index.js"
 import { Markup } from "telegraf"
 
 

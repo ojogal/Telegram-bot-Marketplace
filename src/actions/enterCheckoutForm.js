@@ -1,4 +1,4 @@
-import { checkoutFormStep } from "./checkoutFormStep.js"
+import { checkoutFormStep } from "./index.js"
 
 
 export const enterCheckoutForm = async (ctx) => {

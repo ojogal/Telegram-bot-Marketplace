@@ -1,5 +1,4 @@
-import { getCoffeeProducts } from "./getCoffeeProducts.js"
-import { getEquipmentProducts } from "./getEquipmentProducts.js";
+import { getCoffeeProducts, getEquipmentProducts } from "./index.js"
 
 
 export const nextPage = async (ctx) => {
