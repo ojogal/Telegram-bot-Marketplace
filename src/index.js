@@ -30,9 +30,8 @@ bot.use(session(),
         currentMessageIds: [],
         cart: [],
         cartTotalId: null,
-        selectedFilter: null,
-        selectedCategory: null,
-        cartItemsIds: []
+        cartItemsIds: [],
+        selectedCategory: null
       }
     }
     if ((ctx.update.message && ctx.update.message.entities && ctx.update.message.entities.some(e => e.type === 'bot_command')) || ctx.update?.message?.text === 'Cart') {

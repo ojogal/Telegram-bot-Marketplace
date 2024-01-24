@@ -1,5 +1,5 @@
 export const CONFIG = {
-    productsPerPage: 2,
+    productsPerPage: 5,
     LOCALES: {
         order: {
             confirm: "✅ Confirm and place order",
