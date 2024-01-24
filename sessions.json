@@ -1,0 +1,29 @@
+{
+  "sessions": [
+    {
+      "id": "870932855:870932855",
+      "data": {
+        "common": {
+          "lastCommand": "/cart",
+          "assertField": null
+        },
+        "checkout": {
+          "items": [],
+          "form": {
+            "phone": "",
+            "email": ""
+          }
+        },
+        "catalog": {
+          "currentPage": 1,
+          "totalPages": 0,
+          "currentMessageIds": [],
+          "cart": [],
+          "cartTotalId": null,
+          "selectedFilter": null,
+          "selectedCategory": null
+        }
+      }
+    }
+  ]
+}
