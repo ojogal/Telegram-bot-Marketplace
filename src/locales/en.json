@@ -1,0 +1,73 @@
+{
+    "start": {
+        "intro": "Welcome to the Kosmonavtika store. Check out our offers, place an order and we will contact you to clarify the details." 
+    },
+	"menu": {
+		"coffee": "Coffee",
+        "equipment": "Equipment",
+        "cart": "Cart",
+        "language": "Language",
+        "order_canceled": "Order declined successfully"
+	},
+    "product": {
+        "category": {
+            "filter": "Filter",
+            "espresso": "Espresso",
+            "see_all": "All",
+            "drippers": "Drippers",
+            "scales": "Scales",
+            "grinders": "Grinders",
+            "kettles": "Kettles",
+            "servers": "Servers",
+            "paper_filters": "Paper filters",
+            "aeropresses": "Aeropresses"
+        }
+    },
+    "messages": {
+        "choose_category": "Please choose an option:",
+        "no_products": "There are no available products yet :(",
+        "empty_cart": "Your cart is empty",
+        "confirm_order": "✅ Confirm and place order",
+        "cancel_order": "❌ Cancel and exit checkout",
+        "page": "Page",
+        "page_of": "of",
+        "grind_option": "Please choose grind option:",
+        "choose_language": "Please choose a language:",
+        "language_chosen": "Language is changed successfully",
+        "enter_checkout": "Great! We need to collect some information to proceed with your order.",
+        "checkout_details_field": "Please type your",
+        "delivery": "Delivery: for free",
+        "order_confirm": "Order submitted successfully! We will contact you soon.",
+        "order_canceled": "Checkout progress dismissed.",
+        "total_quantity": "{{quantity}} items"
+    },
+    "buttons": {
+        "add_to_cart": "Add to cart",
+        "cancel": "Cancel",
+        "order": {
+            "confirm": "✅ Confirm and place order",
+            "cancel": "❌ Cancel and exit checkout"
+        },
+        "grind_options": {
+            "filter": "Filter",
+            "espresso": "Espresso",
+            "cold_brew": "Cold brew",
+            "french_press": "French press",
+            "turkish": "Turkish",
+            "moka": "Moka",
+            "none": "In beans"
+        },
+        "next": "Next",
+        "previous": "Previous",
+        "grind_it": "Grind it!",
+        "remove": "Remove",
+        "paper_filers_offer": "Paper filters?",
+        "checkout": "CHECKOUT"
+    },
+    "common": {
+        "fields": {
+            "phone": "phone",
+            "email": "email"
+        }
+    }
+}

@@ -18,7 +18,7 @@ export const setProductsCategory = async (ctx) => {
         if (ctx.session.catalog.cartItemsIds.length) {
             for (const id of ctx.session.catalog.cartItemsIds) {
                 try {
-                    await ctx.deleteMessage(id);
+                    await ctx.deleteMessage(id) 
                 } catch (error) {
                     console.error(`Error deleting cart item message (ID: ${id}):`, error)
                 }

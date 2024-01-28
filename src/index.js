@@ -1,40 +1,46 @@
 import { config } from "dotenv"
 config()
-import { session } from "telegraf"
-import { addToCart, cancelCheckout, 
-  checkoutFormStep, enterCheckoutForm, 
-  nextPage, orderCancel, 
-  orderConfirm, 
-  prevPage, productsFilters, 
-  removeFromCart, selectGrindOption, 
-  sendCartItems, setGrindOption, 
-  start, updateQuantity } from "./actions/index.js"
-import { getCoffeeList, retrieveTables, getEquipmentList } from "./db/index.js"
-import { bot } from "./bot.js"
+import {
+  addToCart, cancelCheckout,
+  checkoutFormStep, enterCheckoutForm,
+  nextPage, orderCancel,
+  orderConfirm,
+  prevPage, getCoffeeCategory,
+  removeFromCart, selectGrindOption,
+  sendCartItems, setGrindOption,
+  start, updateQuantity,
+  getLanguage, setLanguage
+} from "./actions/index.js"
+import { getCoffeeList, retrieveTables, getEquipmentList, coffeeList, equipmentList } from "./db/index.js"
+import { bot, i18n } from "./bot.js"
 import { CONFIG } from "./config.js"
 import { getEquipmentCategory } from "./actions/getEquipmentCategory.js"
 import { setProductsCategory } from "./actions/setProductsCategory.js"
+import { getRegexByKey } from './utils/getRegexByKey.js'
 
-
-bot.use(session(),
+bot.use(
   (ctx, next) => {
-    if (!ctx.session) ctx.session = {
-      common: {
-        lastCommand: null,
-        assertField: null,
-      },
-      checkout: { items: [], form: { phone: '', email: '' } },
-      catalog: {
-        currentPage: 1,
-        totalPages: 0,
-        currentMessageIds: [],
-        cart: [],
-        cartTotalId: null,
-        cartItemsIds: [],
-        selectedCategory: null
-      }
+    if (!ctx.session.language) ctx.session.language = ctx.message.from.language_code
+    if (!ctx.session.common) ctx.session.common = {
+      lastCommand: null,
+      assertField: null,
     }
-    if ((ctx.update.message && ctx.update.message.entities && ctx.update.message.entities.some(e => e.type === 'bot_command')) || ctx.update?.message?.text === 'Cart') {
+    if (!ctx.session.checkout) ctx.session.checkout = {
+      items: [], form: { phone: '', email: '' }
+    }
+    if (!ctx.session.catalog) ctx.session.catalog = {
+      currentPage: 1,
+      totalPages: 0,
+      currentMessageIds: [],
+      cart: [],
+      cartTotalId: null,
+      cartItemsIds: [],
+      selectedCategory: null
+    }
+    ctx.i18n = i18n
+    ctx.i18n.setLocale(ctx.session.language || ctx.message.from.language_code)
+
+    if ((ctx.update.message && ctx.update.message.entities && ctx.update.message.entities.some(e => e.type === 'bot_command')) || ctx.update?.message?.text === 'Cart' || ctx.update?.callback_query?.data?.includes?.('setLanguage')) {
       ctx.session.common.lastCommand = ctx.update?.message?.text || null
       ctx.session.catalog.cartTotalId = null
     }
@@ -51,19 +57,24 @@ bot.use(session(),
 
 bot.command("start", start)
 
-bot.hears("Cart", sendCartItems)
+bot.hears(getRegexByKey('menu.cart'), sendCartItems)
 bot.command("cart", sendCartItems)
 
-bot.hears("All coffee", productsFilters)
-bot.command("coffee", productsFilters)
+bot.hears(getRegexByKey('menu.coffee'), getCoffeeCategory)
+bot.command("coffee", getCoffeeCategory)
 
-bot.hears("All equipment", getEquipmentCategory)
+bot.hears(getRegexByKey('menu.equipment'), getEquipmentCategory)
 bot.command("equipment", getEquipmentCategory)
 
 bot.hears('Checkout', enterCheckoutForm)
 bot.command('checkout', enterCheckoutForm)
 
+bot.hears(getRegexByKey('menu.language'), getLanguage)
+bot.command("language", getLanguage)
+
 bot.action(/addToCart (.+) (.+)/, addToCart)
+
+bot.action(/setLanguage (.+)/, setLanguage)
 
 bot.action(/setProductsCategory (.+) (.+)/, setProductsCategory)
 
@@ -83,18 +94,27 @@ bot.action(/selectGrindOption (.+)/, selectGrindOption)
 
 bot.action(/setGrindOption (.+?) (.+)/, setGrindOption)
 
-bot.action(CONFIG.LOCALES.order.cancel, orderCancel)
+bot.action(CONFIG.ACTIONS.checkout.cancel, orderCancel)
 
-bot.action(CONFIG.LOCALES.order.confirm, orderConfirm)
+bot.action(CONFIG.ACTIONS.checkout.confirm, orderConfirm)
 
-await Promise.all([
+Promise.all([
   await retrieveTables(),
-  await getEquipmentList(),
-  await getCoffeeList(),
-]).then(() => bot.launch())
-
-process.on('uncaughtException', (err) => {
-  bot.telegram.sendMessage(process.env.GROUP_BOT_ID, `<b>⚠️ Emergency Store bot restart</b>\n<br/><pre>${JSON.stringify(err)}</pre>`, { parse_mode: 'HTML' })
-  bot.stop();
-  setTimeout(bot.start)
+  getEquipmentList(true),
+  getCoffeeList(true),
+]).then(() => {
+  bot.launch();
+  console.log(`${new Date().toLocaleString()} – Bot launched`);
 })
+
+// process.on('uncaughtException', (err) => {
+//   try {
+//     console.log(`${new Date().toLocaleString()} – [Attempting to handle]`, err)
+//     bot.telegram.sendMessage(process.env.GROUP_BOT_ID, `<b>⚠️ Emergency Store bot restart</b>\n<br/><pre>${JSON.stringify(err)}</pre>`, { parse_mode: 'HTML' })
+//     bot.stop()
+//     setTimeout(() => bot.launch(), 1000)
+//   } catch (error) {
+//     console.log(`${new Date().toLocaleString()} –`, error)
+//     process.exit(1);
+//   }
+// })

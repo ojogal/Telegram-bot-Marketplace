@@ -22,14 +22,19 @@ export const updateQuantity = async (ctx) => {
 ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Brand)}
 *${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Title)}*
 ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Process)} process
-_${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Description)}_\n
-Price: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Price)}MDL
-Quantity: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].quantity)}
-Grind for: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].Grind)}
+_${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Description)}_
+
+Sweetness: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Sweetness)}
+Acidity: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Acidity)}
+Bitterness: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Bitterness)}
+
+*Price: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Price)}MDL*
+*Quantity: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].quantity)}*
+*Grind for: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].Grind)}*
       `, {
         message_id: ctx.callbackQuery.message.message_id,
         chat_id: ctx.callbackQuery.message.chat.id,
-        ...qtyControlKeyboard(productId, ctx.session.catalog.cart[productIdx].productType),
+        ...qtyControlKeyboard(ctx, productId, ctx.session.catalog.cart[productIdx].productType),
         parse_mode: 'MarkdownV2'
       })
     } else if (ctx.session.catalog.cart[productIdx].productType === "equipment") {
@@ -37,12 +42,12 @@ Grind for: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].Grind)}
         `
 *${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Title)}*
 _${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Description)}_\n
-Price: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Price)}MDL
-Quantity: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].quantity)}
+*Price: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].product.Price)}MDL*
+*Quantity: ${escapeMarkdown(ctx.session.catalog.cart[productIdx].quantity)}*
         `, {
           message_id: ctx.callbackQuery.message.message_id,
           chat_id: ctx.callbackQuery.message.chat.id,
-          ...qtyControlKeyboard(productId, ctx.session.catalog.cart[productIdx].productType),
+          ...qtyControlKeyboard(ctx, productId, ctx.session.catalog.cart[productIdx].productType),
           parse_mode: 'MarkdownV2'
         })
       }

@@ -6,7 +6,7 @@ import { getItemQuantity, updateItemQuantity } from "../utils/index.js"
 
 export const orderConfirm = async (ctx) => {
     if (ctx.session.catalog.cart.length === 0) {
-        return ctx.reply("Your cart is empty")
+        return ctx.reply(ctx.i18n.__("messages.empty_cart"))
     }
 
     if (ctx.session.common.lastCommand === "cancelCheckout") {
@@ -68,12 +68,13 @@ ${ctx.session.catalog.cart.map((item, i) =>
         ctx.session.catalog.currentPage = 1
 
         ctx.reply(
-            "Order submitted successfully! We will contact you soon.",
+            ctx.i18n.__("messages.order_confirm"),
             Markup.keyboard([
-                [Markup.button.callback("All coffee"),
-                Markup.button.callback("All equipment")
+                [Markup.button.callback(ctx.i18n.__("menu.coffee")),
+                Markup.button.callback(ctx.i18n.__("menu.equipment"))
                 ],
-                [Markup.button.callback("Cart")],
+                [Markup.button.callback(ctx.i18n.__("menu.cart"))],
+                [Markup.button.callback(ctx.i18n.__("menu.language"))],
             ])
         )
     }

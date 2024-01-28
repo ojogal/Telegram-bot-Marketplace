@@ -1,5 +1,5 @@
 import { CONFIG } from "../config.js"
-import { coffeeList, getCoffeeList, retrieveTables } from "../db/index.js"
+import { getCoffeeList, retrieveTables } from "../db/index.js"
 import { deletePreviousMessages } from "../utils/index.js"
 import { Markup } from "telegraf"
 
@@ -11,12 +11,12 @@ export const getCoffeeProducts = async (ctx) => {
     const startIndex = (ctx.session.catalog.currentPage - 1) * CONFIG.productsPerPage
     const endIndex = startIndex + CONFIG.productsPerPage
   
-    let filteredCurrentProducts = coffeeList.filter((product) => product.Category === ctx.session.catalog.selectedCategory)
+    let filteredCurrentProducts = (await getCoffeeList()).filter((product) => product.Category === ctx.session.catalog.selectedCategory)
   
-    ctx.session.catalog.totalPages = Math.ceil(filteredCurrentProducts.length / CONFIG.productsPerPage);
+    ctx.session.catalog.totalPages = Math.ceil(filteredCurrentProducts.length / CONFIG.productsPerPage) 
   
     if (!filteredCurrentProducts[0]) {
-      return ctx.reply("There are no available products yet :(")
+      return ctx.reply(ctx.i18n.__("messages.no_products"))
     }
   
     let currentProducts = filteredCurrentProducts.slice(startIndex, endIndex)
@@ -39,12 +39,17 @@ _${product.Brand}_
 
 ${product.Process} process
 _${escapedDescription}_
-${product.Size}  \\\|  ${product.Price}MDL
+
+Sweetness: ${product.Sweetness}
+Acidity: ${product.Acidity}
+Bitterness: ${product.Bitterness}
+
+*${product.Size}  \\\|  ${product.Price}MDL*
         `,
               reply_markup: {
                 inline_keyboard: [[
                   {
-                    text: "Add to cart",
+                    text: ctx.i18n.__("buttons.add_to_cart"),
                     callback_data: `addToCart ${product.ID} coffee`
                   }
                 ]]
@@ -56,16 +61,16 @@ ${product.Size}  \\\|  ${product.Price}MDL
           // Save the current message ID
           ctx.session.catalog.currentMessageIds.push(message.message_id)
         } catch (error) {
-          console.log("getCoffeeProducts:", error);
+          console.log("getCoffeeProducts:", error)
           await retrieveTables()
-          await getCoffeeList()
+          await getCoffeeList(true)
         }
       }
     }
   
     const paginationButtons = [
-      Markup.button.callback("Previous", "prevPage coffee"),
-      Markup.button.callback("Next", "nextPage coffee"),
+      Markup.button.callback(ctx.i18n.__("buttons.previous"), "prevPage coffee"),
+      Markup.button.callback(ctx.i18n.__("buttons.next"), "nextPage coffee"),
     ]
   
     if (ctx.session.catalog.currentPage === 1) {
@@ -77,7 +82,7 @@ ${product.Size}  \\\|  ${product.Price}MDL
     }
     // Add pagination buttons
     const paginationMessage = await ctx.reply(
-      `Page ${ctx.session.catalog.currentPage} of ${ctx.session.catalog.totalPages}`,
+      `${ctx.i18n.__("messages.page")} ${ctx.session.catalog.currentPage} ${ctx.i18n.__("messages.page_of")} ${ctx.session.catalog.totalPages}`,
       Markup.inlineKeyboard(paginationButtons)
     )
     // Save the pagination message ID

@@ -6,12 +6,13 @@ export const start = (ctx) => {
     ctx.session.catalog.cartTotalId = null
     ctx.session.catalog.currentPage = 1
     ctx.reply(
-        "Welcome to the Kosmonavtika store. Check out our offers, select a product and we will contact you to clarify the details.",
+        ctx.i18n.__("start.intro"),
         Markup.keyboard([
-            [Markup.button.callback("All coffee"),
-            Markup.button.callback("All equipment")
+            [Markup.button.callback(ctx.i18n.__("menu.coffee")),
+            Markup.button.callback(ctx.i18n.__("menu.equipment"))
             ],
-            [Markup.button.callback("Cart")],
+            [Markup.button.callback(ctx.i18n.__("menu.cart"))],
+            [Markup.button.callback(ctx.i18n.__("menu.language"))],
         ])
     )
 }

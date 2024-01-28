@@ -1,7 +1,7 @@
 import { Client } from "@notionhq/client"
 import { extractCoffeeFields } from "../utils/index.js"
 import { config } from "dotenv"
-config();
+config()
 
 export const notion = new Client({ auth: process.env.NOTION_KEY })
 const TABLES = {}
@@ -22,24 +22,38 @@ export const retrieveTables = async () => {
         if (block.type !== 'child_database') continue
         TABLES[block[block.type].title] = block.id
     }
-};
-
-export const getCoffeeList = async () => {
-    coffeeList = []
-    const products = await notion.databases.query({ database_id: TABLES.Coffee })
-    for (let i = 0; i < products.results.length; i++) {
-        const product = extractCoffeeFields(products.results[i])
-        coffeeList.push(product)
-    }
 }
 
-export const getEquipmentList = async () => {
-    equipmentList = []
-    const products = await notion.databases.query({ database_id: TABLES.Equipment })
-    for (let i = 0; i < products.results.length; i++) {
-        const product = extractCoffeeFields(products.results[i])
-        equipmentList.push(product)
+export const getCoffeeList = async (refresh = false) => {
+    // if (coffeeList > 1) return coffeeList
+
+    if (refresh) {
+        coffeeList = []
+        const products = await notion.databases.query({ database_id: TABLES.Coffee })
+        for (let i = 0; i < products.results.length; i++) {
+            const product = extractCoffeeFields(products.results[i])
+            coffeeList.push(product)
+        }
+        return coffeeList
     }
+    return coffeeList
 }
+
+export const getEquipmentList = async (refresh) => {
+    if (refresh) {
+        equipmentList = []
+        const products = await notion.databases.query({ database_id: TABLES.Equipment })
+        for (let i = 0; i < products.results.length; i++) {
+            const product = extractCoffeeFields(products.results[i])
+            equipmentList.push(product)
+        }
+        return equipmentList
+    }
+    return equipmentList
+}
+
+setInterval(() => {
+    Promise.all([getCoffeeList(true), getEquipmentList(true)]).then(() => console.log("Database content revalidated!"))
+}, 60 * 1000)
 
 export { coffeeList, equipmentList }

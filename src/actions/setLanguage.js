@@ -1,13 +1,13 @@
 import { Markup } from "telegraf"
+import { deletePreviousMessages } from "../utils/index.js"
 
-export const orderCancel = (ctx) => {
-    ctx.session.checkout = { form: { phone: '', email: '' } }
-    ctx.session.common.assertField = null
-    ctx.session.common.lastCommand = "cancelCheckout"
-    ctx.session.catalog.cartTotalId = null
-    ctx.session.catalog.currentPage = 1
-    ctx.reply(
-        ctx.i18n.__("menu.order_canceled"),
+export const setLanguage = async  (ctx) => {
+    const [, language] = ctx.match
+
+    ctx.session.language = language
+    ctx.i18n.setLocale(ctx.session.language)
+
+    ctx.reply(ctx.i18n.__("messages.language_chosen"),
         Markup.keyboard([
             [Markup.button.callback(ctx.i18n.__("menu.coffee")),
             Markup.button.callback(ctx.i18n.__("menu.equipment"))
@@ -16,4 +16,6 @@ export const orderCancel = (ctx) => {
             [Markup.button.callback(ctx.i18n.__("menu.language"))],
         ])
     )
+
+    await deletePreviousMessages(ctx)
 }

@@ -4,13 +4,13 @@ import { bot } from "../bot.js"
 export const sendCartTotal = async (ctx) => {
   const totalProducts = ctx.session.catalog.cart.reduce((acc, item) => (item.quantity || 0) + acc, 0)
   const totalCost = ctx.session.catalog.cart.reduce((acc, item) => ((item.quantity || 0) * item.product.Price) + acc, 0)
-  const message = totalProducts > 0 ? `${totalProducts} item${totalProducts > 1 ? 's' : ''} | ${totalCost}MDL` : `Cart is empty`
-
+  // const message = totalProducts > 0 ? `${totalProducts} item${totalProducts > 1 ? 's' : ''} | ${totalCost}MDL` : `Cart is empty`
+  const message = totalProducts > 0 ? ctx.i18n.__("messages.total_quantity", { quantity: totalProducts }) + ` | ${totalCost}MDL` : `Cart is empty`
   const hasPaperFilters = ctx.session.catalog.cart.some(item => item.product.Category === 'Paper filters')
 
-  let inlineKeyboard = [[Markup.button.callback(`CHECKOUT`, `enterCheckoutForm`)]]
+  let inlineKeyboard = [[Markup.button.callback(ctx.i18n.__("buttons.checkout"), `enterCheckoutForm`)]]
 
-  if (!hasPaperFilters) { inlineKeyboard.unshift([Markup.button.callback(`Paper filters?`, "setProductsCategory Paper equipment")]) }
+  if (!hasPaperFilters) { inlineKeyboard.unshift([Markup.button.callback(ctx.i18n.__("buttons.paper_filers_offer"), "setProductsCategory Paper equipment")]) }
 
   try {
     if (ctx.session.catalog.cartTotalId) {

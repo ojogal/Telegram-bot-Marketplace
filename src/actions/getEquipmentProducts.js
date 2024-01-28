@@ -11,19 +11,19 @@ export const getEquipmentProducts = async (ctx) => {
     const startIndex = (ctx.session.catalog.currentPage - 1) * CONFIG.productsPerPage
     const endIndex = startIndex + CONFIG.productsPerPage
   
-    let filteredCurrentProducts = equipmentList.filter(ctx.session.catalog.selectedCategory === "all" ? () => true : (product) => product.Category === ctx.session.catalog.selectedCategory)
+    let filteredCurrentProducts = (await getEquipmentList()).filter(ctx.session.catalog.selectedCategory === "all" ? () => true : (product) => product.Category === ctx.session.catalog.selectedCategory)
   
     ctx.session.catalog.totalPages = Math.ceil(filteredCurrentProducts.length / CONFIG.productsPerPage)
   
     if (!filteredCurrentProducts[0]) {
-      const noProductsMessage = await ctx.reply("There are no available products yet :(")
+      const noProductsMessage = await ctx.reply(ctx.i18n.__("messages.no_products"))
       ctx.session.catalog.currentMessageIds.push(noProductsMessage.message_id)
       return
     }
   
     let currentProducts = filteredCurrentProducts.slice(startIndex, endIndex)
   
-    for (let index = 0; index < currentProducts.length; index++) {
+    for (let index = 0;  index < currentProducts.length;  index++) {
       const product = currentProducts[index]
   
       if (product.Image) {
@@ -39,12 +39,12 @@ export const getEquipmentProducts = async (ctx) => {
 *${escapedTitle}*
 
 _${escapedDescription}_
-Price: ${product.Price}MDL
+*Price: ${product.Price}MDL*
         `,
               reply_markup: {
                 inline_keyboard: [[
                   {
-                    text: "Add to cart",
+                    text: ctx.i18n.__("buttons.add_to_cart"),
                     callback_data: `addToCart ${product.ID} equipment`
                   }
                 ]]
@@ -57,14 +57,14 @@ Price: ${product.Price}MDL
           ctx.session.catalog.currentMessageIds.push(message.message_id)
         } catch (error) {
           await retrieveTables()
-          await getEquipmentList()
+          await getEquipmentList(true)
         }
       }
     }
   
     const paginationButtons = [
-      Markup.button.callback("Previous", "prevPage equipment"),
-      Markup.button.callback("Next", "nextPage equipment"),
+      Markup.button.callback(ctx.i18n.__("buttons.previous"), "prevPage equipment"),
+      Markup.button.callback(ctx.i18n.__("buttons.next"), "nextPage equipment"),
     ]
   
     if (ctx.session.catalog.currentPage === 1) {
@@ -76,7 +76,7 @@ Price: ${product.Price}MDL
     }
     // Add pagination buttons
     const paginationMessage = await ctx.reply(
-      `Page ${ctx.session.catalog.currentPage} of ${ctx.session.catalog.totalPages}`,
+      `${ctx.i18n.__("messages.page")} ${ctx.session.catalog.currentPage} ${ctx.i18n.__("messages.page_of")} ${ctx.session.catalog.totalPages}`,
       Markup.inlineKeyboard(paginationButtons)
     )
     // Save the pagination message ID
