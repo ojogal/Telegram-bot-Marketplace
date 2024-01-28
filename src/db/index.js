@@ -29,21 +29,25 @@ export const getCoffeeList = async (refresh = false) => {
         coffeeList = []
         const products = await notion.databases.query({ database_id: TABLES.Coffee })
         for (let i = 0; i < products.results.length; i++) {
-            const product = extractCoffeeFields(products.results[i])
-            coffeeList.push(product)
+            if (products.results[i].properties.Quantity.number > 0) {
+                const product = extractCoffeeFields(products.results[i])
+                coffeeList.push(product)
+            }
         }
         return coffeeList
     }
     return coffeeList
 }
 
-export const getEquipmentList = async (refresh) => {
+export const getEquipmentList = async (refresh = false) => {
     if (refresh) {
         equipmentList = []
         const products = await notion.databases.query({ database_id: TABLES.Equipment })
         for (let i = 0; i < products.results.length; i++) {
-            const product = extractCoffeeFields(products.results[i])
-            equipmentList.push(product)
+            if (products.results[i].properties.Quantity.number > 0) {
+                const product = extractCoffeeFields(products.results[i])
+                equipmentList.push(product)
+            }
         }
         return equipmentList
     }

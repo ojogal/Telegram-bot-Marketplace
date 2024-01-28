@@ -5,7 +5,6 @@ import { sendCartTotal } from "./index.js"
 export const sendCartItems = async (ctx) => {
 
   await deletePreviousMessages(ctx)
-
   if (ctx.session.catalog.cart.length === 0) {
     ctx.reply(ctx.i18n.__("messages.empty_cart")) 
   } else {
@@ -22,8 +21,10 @@ export const sendCartItems = async (ctx) => {
     })).then((promises) => {
       try {
         ctx.session.catalog.cartItemsIds = [...promises?.map?.(p => p.message_id)]
-        sendCartTotal(ctx) 
-      } catch { }
+        sendCartTotal(ctx)
+      } catch (error) {
+        console.log("sendCartItems:", sendCartItems);
+      }
     })
   }
 }

@@ -44,9 +44,9 @@ export const orderConfirm = async (ctx) => {
         }
     }
 
-    const precessItems = await processItemQuantity(ctx)
+    const processItems = await processItemQuantity(ctx)
 
-    if (!precessItems) {
+    if (!processItems) {
         const totalCost = ctx.session.catalog.cart.reduce((acc, item) => ((item.quantity || 0) * item.product.Price) + acc, 0)
         bot.telegram.sendMessage(process.env.GROUP_BOT_ID, `<b>Client details:</b>
 client: <a href="tg://user?id=${ctx.callbackQuery.from.id}">${ctx.callbackQuery.from.first_name || ''} ${ctx.callbackQuery.from.last_name || ''}</a>
@@ -77,5 +77,7 @@ ${ctx.session.catalog.cart.map((item, i) =>
                 [Markup.button.callback(ctx.i18n.__("menu.language"))],
             ])
         )
+        getCoffeeList(true)
+        getEquipmentList(true)
     }
 }
