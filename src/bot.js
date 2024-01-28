@@ -15,6 +15,6 @@ export const i18n = new I18n({
   
 const bot = new Telegraf(process.env.BOT_TOKEN, { handlerTimeout: Infinity })
   
-bot.use((new LocalSession({ database: 'local/session.json' })).middleware())
+// bot.use((new LocalSession({ database: 'local/session.json' })).middleware())
 
 export { bot }
