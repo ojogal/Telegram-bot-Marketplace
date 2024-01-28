@@ -25,8 +25,6 @@ export const retrieveTables = async () => {
 }
 
 export const getCoffeeList = async (refresh = false) => {
-    // if (coffeeList > 1) return coffeeList
-
     if (refresh) {
         coffeeList = []
         const products = await notion.databases.query({ database_id: TABLES.Coffee })
@@ -54,6 +52,6 @@ export const getEquipmentList = async (refresh) => {
 
 setInterval(() => {
     Promise.all([getCoffeeList(true), getEquipmentList(true)]).then(() => console.log("Database content revalidated!"))
-}, 60 * 1000)
+}, 5 * 60 * 1000)
 
 export { coffeeList, equipmentList }
